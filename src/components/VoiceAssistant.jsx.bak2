@@ -76,11 +76,11 @@ const VoiceAssistant = () => {
         return;
       }
       
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${apiKey}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          contents: [{ parts: [{ text: "เน€เธโ€ขเน€เธเธเน€เธยเน€เธโฌเน€เธยเน€เธยเน€เธยเน€เธย เน€เธเธ’เน€เธเธเน€เธเธ’เน€เธยเน€เธโ€”เน€เธเธเน€เธยเน€เธยเน€เธยเน€เธยเน€เธเธเน€เธเธเน€เธยเน€เธเธ‘เน€เธย เน€เธโฌเน€เธยเน€เธยเน€เธยเน€เธยเน€เธเธเน€เธเธเน€เธเธเน€เธยเน€เธเธ’เน€เธโ€ขเน€เธเธ” เน€เธโฌเน€เธยเน€เธยเน€เธยเน€เธยเน€เธเธ‘เน€เธยเน€เธโฌเน€เธเธเน€เธย เน€เธยเน€เธเธเน€เธยเน€เธโฌเน€เธยเน€เธเธ”เน€เธย 3 เน€เธยเน€เธเธเน€เธเธเน€เธยเน€เธเธเน€เธย เน€เธยเน€เธเธ“เน€เธโ€“เน€เธเธ’เน€เธเธเน€เธยเน€เธเธ—เน€เธเธ: " + prompt }] }] 
+          contents: [{ parts: [{ text: "เธ•เธญเธเน€เธเนเธเธ เธฒเธฉเธฒเนเธ—เธขเนเธเธเธเธฃเธฐเธเธฑเธ เน€เธเนเธเธเธฃเธฃเธกเธเธฒเธ•เธด เน€เธเนเธเธเธฑเธเน€เธญเธ เนเธกเนเน€เธเธดเธ 3 เธเธฃเธฐเนเธขเธ เธเธณเธ–เธฒเธกเธเธทเธญ: " + prompt }] }] 
         })
       });
       
@@ -88,9 +88,6 @@ const VoiceAssistant = () => {
       if (data.candidates && data.candidates[0].content.parts[0].text) {
         const answer = data.candidates[0].content.parts[0].text.replace(/\*/g, '');
         speak(answer);
-      } else if (data.error) {
-        speak('AI ERROR: ' + (data.error.status || 'UNKNOWN'));
-        console.error(data.error);
       } else {
         speak('NEURAL NET ERROR');
       }
@@ -102,11 +99,11 @@ const VoiceAssistant = () => {
   const handleCommand = (text) => {
     const lowerText = text.toLowerCase();
     
-    if (lowerText.includes('เน€เธเธเน€เธเธเน€เธเธ‘เน€เธเธเน€เธโ€เน€เธเธ•') || lowerText.includes('เน€เธโ€เน€เธเธ•เน€เธยเน€เธยเน€เธเธ’')) {
-      speak('เน€เธเธเน€เธเธเน€เธเธ‘เน€เธเธเน€เธโ€เน€เธเธ• เน€เธยเน€เธเธ‘เน€เธยเน€เธยเน€เธเธ—เน€เธเธ เน€เธเธเน€เธเธ…เน€เธเธ”เน€เธเธ (ALICE) เน€เธเธเน€เธเธเน€เธยเน€เธยเน€เธเธเน€เธเธเน€เธเธเน€เธยเน€เธยเน€เธเธ…เน€เธเธเน€เธเธเน€เธยเน€เธเธเน€เธยเน€เธยเน€เธเธ…เน€เธเธ’เน€เธย');
-    } else if (lowerText.includes('เน€เธโฌเน€เธเธเน€เธเธ…เน€เธเธ’')) {
+    if (lowerText.includes('เธชเธงเธฑเธชเธ”เธต') || lowerText.includes('เธ”เธตเธเนเธฒ')) {
+      speak('เธชเธงเธฑเธชเธ”เธต เธเธฑเธเธเธทเธญ เธญเธฅเธดเธช (ALICE) เธฃเธฐเธเธเธชเธกเธญเธเธเธฅเธจเธนเธเธขเนเธเธฅเธฒเธ');
+    } else if (lowerText.includes('เน€เธงเธฅเธฒ')) {
       const timeStr = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-      speak(`เน€เธโฌเน€เธเธเน€เธเธ…เน€เธเธ’เน€เธยเน€เธเธ‘เน€เธยเน€เธยเน€เธเธเน€เธยเน€เธเธ‘เน€เธย ${timeStr}`);
+      speak(`เน€เธงเธฅเธฒเธเธฑเธเธเธธเธเธฑเธ ${timeStr}`);
     } else {
       askGemini(text);
     }
