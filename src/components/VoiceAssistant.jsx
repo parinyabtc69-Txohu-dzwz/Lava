@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Mic, Search, Loader2 } from 'lucide-react';
-import assistantImg from '../assets/assistant.jpg';
+import { Mic, Search, Loader2, Sparkles } from 'lucide-react';
 
 const VoiceAssistant = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const [reply, setReply] = useState('สวัสดีค่ะ ฉันคือ อลิส');
+  const [reply, setReply] = useState('ระบบพร้อมใช้งานค่ะ');
   const recognitionRef = useRef(null);
 
   useEffect(() => {
@@ -84,12 +83,12 @@ const VoiceAssistant = () => {
     }
 
     if (lowerText.includes('สวัสดี') || lowerText.includes('ดีจ้า')) {
-      speak('สวัสดีค่ะ มีอะไรให้ช่วยไหมคะ?');
+      speak('สวัสดีค่ะ ฉันคือ อลิส (Alice) ศูนย์กลางระบบของคุณค่ะ');
     } else if (lowerText.includes('เวลา')) {
       const timeStr = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-      speak(`ตอนนี้ ${timeStr} นาฬิกาค่ะ`);
+      speak(`ตอนนี้เวลา ${timeStr} นาฬิกาค่ะ`);
     } else {
-      speak(`ไม่เข้าใจค่ะ ลองสั่งให้ค้นหาดูนะคะ`);
+      speak(`รับทราบค่ะ แต่คุณไม่ได้สั่งให้ค้นหาข้อมูล`);
     }
   };
 
@@ -102,67 +101,90 @@ const VoiceAssistant = () => {
   };
 
   return (
-    <div className="glass-panel p-4 flex flex-col items-center justify-center gap-4 relative overflow-hidden group">
+    <div className="glass-panel w-full h-full min-h-[400px] flex flex-col items-center justify-center p-8 relative overflow-hidden group">
       
       {/* Background ambient continuous pulse */}
-      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[60px] pointer-events-none transition-all duration-700 animate-pulse ${isListening ? 'bg-neonCyan/40' : 'bg-neonPurple/20'}`}></div>
+      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none transition-all duration-1000 animate-pulse ${isListening ? 'bg-neonCyan/40' : 'bg-neonPurple/20'}`}></div>
 
-      <div className="text-center z-10 w-full flex flex-col items-center">
+      <div className="text-center z-10 w-full flex flex-col items-center justify-center">
         
-        {/* Holographic 3D Avatar Container with continuous float & spin */}
+        {/* TRUE 3D HOLOGRAPHIC CORE */}
         <div 
           onClick={toggleListening}
-          className="relative w-36 h-36 flex items-center justify-center cursor-pointer mb-2"
-          style={{ animation: 'float 6s ease-in-out infinite' }}
+          className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center cursor-pointer mb-8"
+          style={{ perspective: '1200px' }}
         >
-          {/* Continuous spinning outer rings */}
-          <div className="absolute inset-0 rounded-full border-t-2 border-l-2 border-neonCyan/50 opacity-60 animate-[spin_8s_linear_infinite]"></div>
-          <div className="absolute inset-[-8px] rounded-full border-b-2 border-r-2 border-neonPurple/50 opacity-40 animate-[spin_12s_linear_infinite_reverse]"></div>
-          <div className="absolute inset-[-16px] rounded-full border-t border-neonCyan/30 opacity-30 animate-[spin_20s_linear_infinite]"></div>
-
-          <div className={`relative w-32 h-32 rounded-full overflow-hidden shadow-2xl mix-blend-screen bg-slate-900 transition-all duration-300 ${isListening ? 'shadow-[0_0_40px_rgba(0,255,255,0.6)] border border-neonCyan' : 'shadow-[0_0_20px_rgba(138,43,226,0.4)] border border-neonPurple/40 group-hover:border-neonCyan'}`}>
-            <img 
-              src={assistantImg} 
-              alt="AI Core" 
-              className={`w-full h-full object-cover mix-blend-screen transition-transform duration-[2000ms] ${isListening ? 'scale-110' : 'scale-100'}`}
-              style={{ filter: 'brightness(1.4) contrast(1.1)' }}
-            />
+          {/* Core container with float */}
+          <div className="relative w-full h-full" style={{ animation: 'float 6s ease-in-out infinite', transformStyle: 'preserve-3d' }}>
             
-            {/* Overlay Mic Icon */}
-            <div className={`absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity duration-300 ${isListening ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+            {/* Inner Glowing Orb */}
+            <div className={`absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full transition-all duration-500 ${isListening ? 'bg-white shadow-[0_0_80px_30px_rgba(0,255,255,0.9)] scale-125' : 'bg-neonCyan shadow-[0_0_50px_15px_rgba(0,255,255,0.6)]'}`}></div>
+            
+            {/* 3D Rings */}
+            <div className="absolute inset-0 border-2 border-neonCyan/50 rounded-full" style={{ animation: 'spin3D_X 6s linear infinite', transformStyle: 'preserve-3d' }}>
+                <div className="absolute -top-1.5 left-1/2 w-4 h-4 bg-neonCyan rounded-full shadow-[0_0_15px_#0ff]"></div>
+                <div className="absolute -bottom-1.5 left-1/2 w-4 h-4 bg-neonPurple rounded-full shadow-[0_0_15px_#b0f]"></div>
+            </div>
+            
+            <div className="absolute inset-6 border-[2px] border-neonPurple/60 rounded-full" style={{ animation: 'spin3D_Y 10s linear infinite reverse', transformStyle: 'preserve-3d' }}>
+                <div className="absolute top-1/2 -left-1.5 w-3 h-3 bg-fuchsia-500 rounded-full shadow-[0_0_10px_#d946ef]"></div>
+            </div>
+            
+            <div className="absolute inset-12 border border-white/30 rounded-full" style={{ animation: 'spin3D_Z 14s linear infinite', transformStyle: 'preserve-3d' }}></div>
+            
+            <div className="absolute inset-16 border-[4px] border-dotted border-neonCyan/40 rounded-full" style={{ animation: 'spin3D_XY 18s linear infinite', transformStyle: 'preserve-3d' }}></div>
+
+            {/* Status Icon Hovering in Front */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'translateZ(80px)' }}>
                {isListening ? (
-                 <Loader2 className="w-8 h-8 text-neonCyan animate-spin drop-shadow-[0_0_8px_rgba(0,255,255,1)]" />
+                 <Loader2 className="w-12 h-12 text-white animate-spin drop-shadow-[0_0_20px_rgba(0,255,255,1)]" />
                ) : (
-                 <Mic className="w-8 h-8 text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+                 <Mic className="w-12 h-12 text-white/90 drop-shadow-[0_0_15px_rgba(255,255,255,0.8)] group-hover:scale-110 transition-transform duration-300" />
                )}
             </div>
           </div>
         </div>
 
-        <h2 className="text-sm font-bold tracking-wider uppercase mt-2 mb-1 bg-gradient-to-r from-neonCyan to-neonPurple bg-clip-text text-transparent flex items-center gap-1">
-           <Mic className={`w-4 h-4 ${isListening ? 'text-neonCyan animate-pulse' : 'text-neonPurple'}`} />
-           Alice
+        <h2 className="text-2xl font-black tracking-widest uppercase mb-4 bg-gradient-to-r from-neonCyan via-white to-neonPurple bg-clip-text text-transparent flex items-center gap-3 drop-shadow-[0_0_10px_rgba(0,255,255,0.3)]">
+           <Sparkles className={`w-6 h-6 ${isListening ? 'text-neonCyan animate-ping' : 'text-neonPurple'}`} />
+           Alice AI Core
         </h2>
 
         {/* Reply text box */}
-        <div className="w-full h-10 flex items-center justify-center text-xs font-medium text-slate-200 px-2 text-center bg-slate-900/60 rounded-lg border border-slate-700/50">
+        <div className="w-[90%] max-w-md min-h-[60px] flex items-center justify-center text-base font-semibold text-white px-6 py-3 text-center bg-black/50 backdrop-blur-xl rounded-2xl border border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.6)]">
            {reply}
         </div>
 
         {/* Transcript text box */}
         {transcript && (
-          <div className="mt-1 text-[10px] text-neonCyan font-mono italic max-w-full truncate px-2">
-             "{transcript}"
+          <div className="mt-4 text-sm text-neonCyan font-mono italic max-w-md w-full truncate px-4 bg-black/30 py-2 rounded-lg border border-neonCyan/20">
+             <span className="opacity-50">You: </span> "{transcript}"
           </div>
         )}
       </div>
       
-      {/* Inline styles for float animation */}
+      {/* Keyframes for TRUE 3D spinning */}
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          50% { transform: translateY(-20px); }
           100% { transform: translateY(0px); }
+        }
+        @keyframes spin3D_X {
+          0% { transform: rotateX(0deg) rotateY(60deg); }
+          100% { transform: rotateX(360deg) rotateY(60deg); }
+        }
+        @keyframes spin3D_Y {
+          0% { transform: rotateX(60deg) rotateY(0deg); }
+          100% { transform: rotateX(60deg) rotateY(360deg); }
+        }
+        @keyframes spin3D_Z {
+          0% { transform: rotateX(75deg) rotateY(75deg) rotateZ(0deg); }
+          100% { transform: rotateX(75deg) rotateY(75deg) rotateZ(360deg); }
+        }
+        @keyframes spin3D_XY {
+          0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+          100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
         }
       `}</style>
     </div>
