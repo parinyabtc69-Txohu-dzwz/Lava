@@ -59,24 +59,11 @@ const VoiceAssistant = () => {
     setReply(text);
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      
-      // ลบวงเล็บและสัญลักษณ์ที่ทำให้เสียงอ่านเอ๋อ
-      let cleanText = text.replace(/\([^)]*\)/g, '').replace(/\[[^\]]*\]/g, '');
-      
-      // หั่นข้อความยาวๆ เป็นท่อนๆ (ป้องกันบัก Chrome TTS ไม่อ่านข้อความเกิน 200 ตัวอักษร)
-      const chunkSize = 150;
-      const chunks = [];
-      for (let i = 0; i < cleanText.length; i += chunkSize) {
-        chunks.push(cleanText.substring(i, i + chunkSize));
-      }
-
-      chunks.forEach((chunk) => {
-        const utterance = new SpeechSynthesisUtterance(chunk);
-        utterance.lang = 'th-TH';
-        utterance.rate = 1.0;
-        utterance.pitch = 0.9;
-        window.speechSynthesis.speak(utterance);
-      });
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'th-TH';
+      utterance.rate = 1.0;
+      utterance.pitch = 0.9;
+      window.speechSynthesis.speak(utterance);
     }
   };
 
