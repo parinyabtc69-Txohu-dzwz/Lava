@@ -127,7 +127,7 @@ const VoiceAssistant = () => {
   );
 
   return (
-    <div className="glass-panel w-full h-full min-h-[400px] flex flex-col items-center justify-center p-8 relative overflow-hidden group bg-slate-950/80">
+    <div className="glass-panel glass-panel w-full flex flex-col items-center justify-center py-8 px-4 relative overflow-hidden group bg-slate-950/80">
       
       {/* Background ambient continuous pulse */}
       <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full blur-[120px] pointer-events-none transition-all duration-1000 animate-pulse ${isListening ? 'bg-cyan-500/30' : 'bg-fuchsia-600/20'}`}></div>
@@ -140,7 +140,7 @@ const VoiceAssistant = () => {
         {/* TRUE 3D CYBERPUNK HEXAGON CORE */}
         <div 
           onClick={toggleListening}
-          className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center cursor-pointer mb-8"
+          className="relative w-56 h-56 flex items-center justify-center cursor-pointer mb-6"
           style={{ perspective: '1200px' }}
         >
           {/* Particles Layer */}
