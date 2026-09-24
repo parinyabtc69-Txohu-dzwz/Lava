@@ -222,7 +222,7 @@ const VoiceAssistant = () => {
         {/* Transcript text box */}
         {transcript && (
           <div className="mt-4 text-xs text-cyan-400 font-mono tracking-wider max-w-md w-full truncate px-4 bg-slate-900/50 py-2 border border-cyan-500/30">
-             <span className="opacity-50 text-fuchsia-400">INPUT > </span> {transcript}
+             <span className="opacity-50 text-fuchsia-400">INPUT &gt; </span> {transcript}
           </div>
         )}
       </div>
