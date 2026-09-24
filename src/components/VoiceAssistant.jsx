@@ -4,7 +4,8 @@ import { Mic, Search, Loader2, Sparkles, Hexagon } from 'lucide-react';
 const VoiceAssistant = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const [reply, setReply] = useState('Cyberpunk Hex-Core Online');
+  const [inputText, setInputText] = useState('');
+  const [reply, setReply] = useState('Alice Voice system online');
   const [particles, setParticles] = useState([]);
   const recognitionRef = useRef(null);
 
@@ -78,7 +79,7 @@ const VoiceAssistant = () => {
         const parts = lowerText.split(keyword);
         query = parts[parts.length - 1].trim();
         if (query === '' && parts.length > 1) {
-             query = parts[0].trim();
+          query = parts[0].trim();
         }
         break;
       }
@@ -116,10 +117,10 @@ const VoiceAssistant = () => {
 
   const HexagonSVG = ({ className, color }) => (
     <svg viewBox="0 0 100 100" className={`absolute inset-0 w-full h-full ${className}`} style={{ overflow: 'visible' }}>
-      <polygon 
-        points="50,3 91,26 91,74 50,97 9,74 9,26" 
-        fill="none" 
-        stroke={color} 
+      <polygon
+        points="50,3 91,26 91,74 50,97 9,74 9,26"
+        fill="none"
+        stroke={color}
         strokeWidth="1.5"
         style={{ filter: `drop-shadow(0 0 8px ${color})` }}
       />
@@ -128,7 +129,7 @@ const VoiceAssistant = () => {
 
   return (
     <div className="glass-panel glass-panel w-full flex flex-col items-center justify-center py-8 px-4 relative overflow-hidden group bg-slate-950/80">
-      
+
       {/* Background ambient continuous pulse */}
       <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full blur-[120px] pointer-events-none transition-all duration-1000 animate-pulse ${isListening ? 'bg-cyan-500/30' : 'bg-fuchsia-600/20'}`}></div>
 
@@ -136,9 +137,9 @@ const VoiceAssistant = () => {
       <div className="absolute inset-0 opacity-10 bg-[linear-gradient(rgba(0,255,255,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.2)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none"></div>
 
       <div className="text-center z-10 w-full flex flex-col items-center justify-center">
-        
+
         {/* TRUE 3D CYBERPUNK HEXAGON CORE */}
-        <div 
+        <div
           onClick={toggleListening}
           className="relative w-56 h-56 flex items-center justify-center cursor-pointer mb-6"
           style={{ perspective: '1200px' }}
@@ -167,66 +168,94 @@ const VoiceAssistant = () => {
 
           {/* Core container with float */}
           <div className="relative w-full h-full z-10" style={{ animation: 'float 4s ease-in-out infinite', transformStyle: 'preserve-3d' }}>
-            
+
             {/* Inner Glowing Hexagon Orb */}
-            <div 
+            <div
               className={`absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 flex items-center justify-center ${isListening ? 'scale-125' : 'scale-100'}`}
             >
-               <Hexagon className={`w-full h-full ${isListening ? 'text-white fill-cyan-400 drop-shadow-[0_0_30px_rgba(34,211,238,1)] animate-pulse' : 'text-cyan-400 fill-cyan-900/50 drop-shadow-[0_0_20px_rgba(34,211,238,0.8)]'}`} strokeWidth={1} />
+              <Hexagon className={`w-full h-full ${isListening ? 'text-white fill-cyan-400 drop-shadow-[0_0_30px_rgba(34,211,238,1)] animate-pulse' : 'text-cyan-400 fill-cyan-900/50 drop-shadow-[0_0_20px_rgba(34,211,238,0.8)]'}`} strokeWidth={1} />
             </div>
-            
+
             {/* 3D Hexagon Shields */}
             <div className="absolute inset-0" style={{ animation: 'spin3D_X 8s linear infinite', transformStyle: 'preserve-3d' }}>
-               <HexagonSVG className="scale-100 opacity-80" color="#22d3ee" />
-               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-2 bg-cyan-400 shadow-[0_0_15px_#22d3ee]"></div>
+              <HexagonSVG className="scale-100 opacity-80" color="#22d3ee" />
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-2 bg-cyan-400 shadow-[0_0_15px_#22d3ee]"></div>
             </div>
-            
+
             <div className="absolute inset-4" style={{ animation: 'spin3D_Y 12s linear infinite reverse', transformStyle: 'preserve-3d' }}>
-               <HexagonSVG className="scale-100 opacity-60" color="#d946ef" />
-               <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-2 h-8 bg-fuchsia-400 shadow-[0_0_15px_#d946ef]"></div>
+              <HexagonSVG className="scale-100 opacity-60" color="#d946ef" />
+              <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-2 h-8 bg-fuchsia-400 shadow-[0_0_15px_#d946ef]"></div>
             </div>
-            
+
             <div className="absolute inset-10" style={{ animation: 'spin3D_Z 16s linear infinite', transformStyle: 'preserve-3d' }}>
-               <HexagonSVG className="scale-100 opacity-40 border-dotted" color="#e2e8f0" />
+              <HexagonSVG className="scale-100 opacity-40 border-dotted" color="#e2e8f0" />
             </div>
-            
+
             <div className="absolute inset-16" style={{ animation: 'spin3D_XY 20s linear infinite', transformStyle: 'preserve-3d' }}>
-               <HexagonSVG className="scale-100 opacity-30" color="#22d3ee" />
-               <HexagonSVG className="scale-105 opacity-20" color="#d946ef" style={{ transform: 'rotate(30deg)' }} />
+              <HexagonSVG className="scale-100 opacity-30" color="#22d3ee" />
+              <HexagonSVG className="scale-105 opacity-20" color="#d946ef" style={{ transform: 'rotate(30deg)' }} />
             </div>
 
             {/* Status Icon Hovering in Front */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'translateZ(100px)' }}>
-               {isListening ? (
-                 <Loader2 className="w-10 h-10 text-white animate-spin drop-shadow-[0_0_15px_rgba(255,255,255,1)]" />
-               ) : (
-                 <Mic className="w-10 h-10 text-cyan-200 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)] group-hover:scale-110 transition-transform duration-300" />
-               )}
+              {isListening ? (
+                <Loader2 className="w-10 h-10 text-white animate-spin drop-shadow-[0_0_15px_rgba(255,255,255,1)]" />
+              ) : (
+                <Mic className="w-10 h-10 text-cyan-200 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)] group-hover:scale-110 transition-transform duration-300" />
+              )}
             </div>
           </div>
         </div>
 
         <h2 className="text-xl sm:text-2xl font-black tracking-[0.3em] uppercase mb-4 bg-gradient-to-r from-cyan-400 via-white to-fuchsia-500 bg-clip-text text-transparent flex items-center gap-3 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
-           <Hexagon className={`w-5 h-5 sm:w-6 sm:h-6 ${isListening ? 'text-cyan-400 animate-ping' : 'text-fuchsia-500'}`} />
-           SYS.ALICE.HEX
+          <Hexagon className={`w-5 h-5 sm:w-6 sm:h-6 ${isListening ? 'text-cyan-400 animate-ping' : 'text-fuchsia-500'}`} />
+          SYS.ALICE.HEX
         </h2>
 
         {/* Reply text box - Cyberpunk style */}
         <div className="w-[90%] max-w-md min-h-[60px] flex items-center justify-center text-base font-bold text-cyan-50 px-6 py-3 text-center bg-slate-900/80 backdrop-blur-xl border-l-4 border-l-cyan-400 border-r-4 border-r-fuchsia-500 border-t border-b border-slate-700 shadow-[0_0_30px_rgba(34,211,238,0.15)] rounded-none relative">
-           {/* Cyberpunk corner cuts fake effect */}
-           <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-cyan-400"></div>
-           <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-fuchsia-500"></div>
-           {reply}
+          {/* Cyberpunk corner cuts fake effect */}
+          <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-cyan-400"></div>
+          <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-fuchsia-500"></div>
+          {reply}
         </div>
+
+        
+        {/* Manual Text Input Form */}
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            if(inputText.trim()) {
+              setTranscript(inputText);
+              handleCommand(inputText);
+              setInputText('');
+            }
+          }}
+          className="mt-4 w-[90%] max-w-md flex items-center gap-2"
+        >
+          <input 
+            type="text" 
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            placeholder="พิมพ์คำสั่งที่นี่..."
+            className="flex-1 bg-slate-900/60 text-cyan-100 text-sm px-4 py-2 border border-cyan-500/50 focus:outline-none focus:border-cyan-400 font-mono rounded-none"
+          />
+          <button 
+            type="submit"
+            className="bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-400 border border-cyan-500/50 px-4 py-2 font-bold font-mono transition-colors rounded-none"
+          >
+            SEND
+          </button>
+        </form>
 
         {/* Transcript text box */}
         {transcript && (
           <div className="mt-4 text-xs text-cyan-400 font-mono tracking-wider max-w-md w-full truncate px-4 bg-slate-900/50 py-2 border border-cyan-500/30">
-             <span className="opacity-50 text-fuchsia-400">INPUT &gt; </span> {transcript}
+            <span className="opacity-50 text-fuchsia-400">INPUT &gt; </span> {transcript}
           </div>
         )}
       </div>
-      
+
       {/* Keyframes for TRUE 3D spinning and Hex Particles */}
       <style>{`
         @keyframes float {
