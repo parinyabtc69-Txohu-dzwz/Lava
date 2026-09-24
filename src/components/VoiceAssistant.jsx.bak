@@ -76,11 +76,11 @@ const VoiceAssistant = () => {
         return;
       }
       
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          contents: [{ parts: [{ text: "เธ•เธญเธเน€เธเนเธเธ เธฒเธฉเธฒเนเธ—เธขเนเธเธเธเธฃเธฐเธเธฑเธ เน€เธเนเธเธเธฃเธฃเธกเธเธฒเธ•เธด เน€เธเนเธเธเธฑเธเน€เธญเธ เนเธกเนเน€เธเธดเธ 3 เธเธฃเธฐเนเธขเธ เธเธณเธ–เธฒเธกเธเธทเธญ: " + prompt }] }] 
+          contents: [{ parts: [{ text: "ตอบเป็นภาษาไทยแบบกระชับ เป็นธรรมชาติ เป็นกันเอง ไม่เกิน 3 ประโยค คำถามคือ: " + prompt }] }] 
         })
       });
       
@@ -99,11 +99,11 @@ const VoiceAssistant = () => {
   const handleCommand = (text) => {
     const lowerText = text.toLowerCase();
     
-    if (lowerText.includes('เธชเธงเธฑเธชเธ”เธต') || lowerText.includes('เธ”เธตเธเนเธฒ')) {
-      speak('เธชเธงเธฑเธชเธ”เธต เธเธฑเธเธเธทเธญ เธญเธฅเธดเธช (ALICE) เธฃเธฐเธเธเธชเธกเธญเธเธเธฅเธจเธนเธเธขเนเธเธฅเธฒเธ');
-    } else if (lowerText.includes('เน€เธงเธฅเธฒ')) {
+    if (lowerText.includes('สวัสดี') || lowerText.includes('ดีจ้า')) {
+      speak('สวัสดี ฉันคือ อลิส (ALICE) ระบบสมองกลศูนย์กลาง');
+    } else if (lowerText.includes('เวลา')) {
       const timeStr = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-      speak(`เน€เธงเธฅเธฒเธเธฑเธเธเธธเธเธฑเธ ${timeStr}`);
+      speak(`เวลาปัจจุบัน ${timeStr}`);
     } else {
       askGemini(text);
     }
