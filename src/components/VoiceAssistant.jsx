@@ -5,21 +5,21 @@ const VoiceAssistant = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [inputText, setInputText] = useState('');
-  const [reply, setReply] = useState('Alice Voice system online');
+  const [reply, setReply] = useState('SYSTEM ONLINE');
   const [particles, setParticles] = useState([]);
   const recognitionRef = useRef(null);
 
   useEffect(() => {
     // Generate Random Particles
-    const newParticles = Array.from({ length: 40 }).map((_, i) => ({
+    const newParticles = Array.from({ length: 60 }).map((_, i) => ({
       id: i,
-      size: Math.random() * 4 + 2,
+      size: Math.random() * 3 + 1,
       top: `${Math.random() * 100}%`,
       left: `${Math.random() * 100}%`,
-      duration: `${Math.random() * 4 + 3}s`,
+      duration: `${Math.random() * 5 + 2}s`,
       delay: `${Math.random() * 5}s`,
-      xMove: `${(Math.random() - 0.5) * 150}px`,
-      yMove: `${(Math.random() - 0.5) * 150}px`,
+      xMove: `${(Math.random() - 0.5) * 200}px`,
+      yMove: `${(Math.random() - 0.5) * 200}px`,
     }));
     setParticles(newParticles);
 
@@ -33,7 +33,7 @@ const VoiceAssistant = () => {
       recognition.onstart = () => {
         setIsListening(true);
         setTranscript('');
-        setReply('กำลังประมวลผลคำสั่ง...');
+        setReply('LISTENING...');
       };
 
       recognition.onresult = (event) => {
@@ -44,7 +44,7 @@ const VoiceAssistant = () => {
 
       recognition.onerror = (event) => {
         setIsListening(false);
-        setReply('ข้อผิดพลาด: สัญญาณเสียงไม่ชัดเจน');
+        setReply('ERROR: SIGNAL LOST');
       };
 
       recognition.onend = () => {
@@ -68,11 +68,11 @@ const VoiceAssistant = () => {
   };
 
   const askGemini = async (prompt) => {
-    setReply('กำลังเชื่อมต่อฐานข้อมูลส่วนกลาง...');
+    setReply('CONNECTING NEURAL NET...');
     try {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
       if (!apiKey) {
-        speak('กรุณาตั้งค่า VITE_GEMINI_API_KEY ในไฟล์ .env ก่อนใช้งาน AI ค่ะ');
+        speak('API KEY MISSING. PLEASE CHECK .ENV');
         return;
       }
       
@@ -89,10 +89,10 @@ const VoiceAssistant = () => {
         const answer = data.candidates[0].content.parts[0].text.replace(/\*/g, '');
         speak(answer);
       } else {
-        speak('เกิดข้อผิดพลาดในการดึงข้อมูลจาก AI ค่ะ');
+        speak('NEURAL NET ERROR');
       }
     } catch (err) {
-      speak('ระบบขัดข้อง ไม่สามารถเชื่อมต่อกับ AI ได้ค่ะ');
+      speak('CONNECTION FAILED');
     }
   };
 
@@ -115,7 +115,7 @@ const VoiceAssistant = () => {
     }
 
     if (isSearch && query) {
-      speak(`ค้นหาข้อมูล: ${query}`);
+      speak(`SEARCHING: ${query}`);
       setTimeout(() => {
         window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
       }, 1500);
@@ -123,12 +123,11 @@ const VoiceAssistant = () => {
     }
     
     if (lowerText.includes('สวัสดี') || lowerText.includes('ดีจ้า')) {
-      speak('สวัสดี ฉันคือ อลิส AI ส่วนกลางของ LAVA OS');
+      speak('สวัสดี ฉันคือ อลิส (ALICE) ระบบสมองกลศูนย์กลาง');
     } else if (lowerText.includes('เวลา')) {
       const timeStr = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-      speak(`เวลาในระบบขณะนี้ ${timeStr}`);
+      speak(`เวลาปัจจุบัน ${timeStr}`);
     } else {
-      // Fallback to Gemini API if no basic command matched
       askGemini(text);
     }
   };
@@ -141,49 +140,36 @@ const VoiceAssistant = () => {
     }
   };
 
-  const HexagonSVG = ({ className, color }) => (
-    <svg viewBox="0 0 100 100" className={`absolute inset-0 w-full h-full ${className}`} style={{ overflow: 'visible' }}>
-      <polygon 
-        points="50,3 91,26 91,74 50,97 9,74 9,26" 
-        fill="none" 
-        stroke={color} 
-        strokeWidth="1.5"
-        style={{ filter: `drop-shadow(0 0 8px ${color})` }}
-      />
-    </svg>
-  );
-
   return (
-    <div className="glass-panel w-full flex flex-col items-center justify-center py-8 px-4 relative overflow-hidden group bg-slate-950/80">
+    <div className="w-full flex flex-col items-center justify-center py-10 px-4 relative overflow-hidden group bg-slate-950 rounded-3xl border border-white/5 shadow-2xl">
       
-      {/* Background ambient continuous pulse */}
-      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full blur-[120px] pointer-events-none transition-all duration-1000 animate-pulse ${isListening ? 'bg-cyan-500/30' : 'bg-fuchsia-600/20'}`}></div>
+      {/* Heavy Ambient Glow */}
+      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none transition-all duration-700 animate-pulse mix-blend-screen ${isListening ? 'bg-cyan-500/40' : 'bg-fuchsia-700/20'}`}></div>
 
-      {/* Cyberpunk Grid Background */}
-      <div className="absolute inset-0 opacity-10 bg-[linear-gradient(rgba(0,255,255,0.2)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,255,0.2)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none"></div>
+      {/* Grid Pattern */}
+      <div className="absolute inset-0 opacity-20 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
 
       <div className="text-center z-10 w-full flex flex-col items-center justify-center">
         
-        {/* TRUE 3D CYBERPUNK HEXAGON CORE */}
+        {/* PREMIUM 3D ABSTRACT AI CORE */}
         <div 
           onClick={toggleListening}
-          className="relative w-56 h-56 flex items-center justify-center cursor-pointer mb-6"
-          style={{ perspective: '1200px' }}
+          className="relative w-64 h-64 flex items-center justify-center cursor-pointer mb-12 mt-4"
+          style={{ perspective: '1000px' }}
         >
-          {/* Particles Layer */}
-          <div className="absolute inset-0 z-0 pointer-events-none">
+          {/* Dust Particles */}
+          <div className="absolute inset-0 z-0 pointer-events-none mix-blend-screen">
             {particles.map(p => (
               <div
                 key={p.id}
-                className={`absolute transition-colors duration-500 ${isListening ? 'bg-cyan-400' : 'bg-fuchsia-500'}`}
+                className={`absolute rounded-full transition-colors duration-700 ${isListening ? 'bg-cyan-300' : 'bg-fuchsia-400'}`}
                 style={{
                   width: p.size,
                   height: p.size,
                   top: p.top,
                   left: p.left,
                   opacity: 0,
-                  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                  boxShadow: `0 0 ${p.size * 3}px ${isListening ? '#22d3ee' : '#d946ef'}`,
+                  boxShadow: `0 0 ${p.size * 4}px ${isListening ? '#22d3ee' : '#d946ef'}`,
                   animation: `float-particle ${p.duration} ease-in-out infinite ${p.delay}`,
                   '--x-move': p.xMove,
                   '--y-move': p.yMove,
@@ -192,60 +178,52 @@ const VoiceAssistant = () => {
             ))}
           </div>
 
-          {/* Core container with float */}
-          <div className="relative w-full h-full z-10" style={{ animation: 'float 4s ease-in-out infinite', transformStyle: 'preserve-3d' }}>
+          {/* Floating Core Assembly */}
+          <div className="relative w-full h-full z-10" style={{ animation: 'float 5s ease-in-out infinite', transformStyle: 'preserve-3d' }}>
             
-            {/* Inner Glowing Hexagon Orb */}
-            <div 
-              className={`absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 flex items-center justify-center ${isListening ? 'scale-125' : 'scale-100'}`}
-            >
-               <Hexagon className={`w-full h-full ${isListening ? 'text-white fill-cyan-400 drop-shadow-[0_0_30px_rgba(34,211,238,1)] animate-pulse' : 'text-cyan-400 fill-cyan-900/50 drop-shadow-[0_0_20px_rgba(34,211,238,0.8)]'}`} strokeWidth={1} />
+            {/* Center Supernova (The White Dwarf) */}
+            <div className={`absolute inset-0 m-auto rounded-full transition-all duration-700 mix-blend-screen ${isListening ? 'w-16 h-16 bg-white shadow-[0_0_80px_40px_rgba(34,211,238,0.8)] scale-150 animate-pulse' : 'w-12 h-12 bg-cyan-100 shadow-[0_0_60px_20px_rgba(217,70,239,0.5)] scale-100'}`}>
+                <div className="w-full h-full rounded-full animate-ping opacity-50 bg-white"></div>
             </div>
             
-            {/* 3D Hexagon Shields */}
-            <div className="absolute inset-0" style={{ animation: 'spin3D_X 8s linear infinite', transformStyle: 'preserve-3d' }}>
-               <HexagonSVG className="scale-100 opacity-80" color="#22d3ee" />
-               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-2 bg-cyan-400 shadow-[0_0_15px_#22d3ee]"></div>
+            {/* Inner Geometric Sphere (Dashed lines crossing) */}
+            <div className="absolute inset-16 border-2 border-dashed border-cyan-300/50 rounded-full mix-blend-screen" style={{ animation: 'spin3D_X 4s linear infinite', transformStyle: 'preserve-3d' }}></div>
+            <div className="absolute inset-16 border-2 border-dashed border-fuchsia-300/50 rounded-full mix-blend-screen" style={{ animation: 'spin3D_Y 5s linear infinite reverse', transformStyle: 'preserve-3d' }}></div>
+            
+            {/* Mid Glowing Halo */}
+            <div className={`absolute inset-8 rounded-full border border-white/20 transition-all duration-700 ${isListening ? 'shadow-[inset_0_0_30px_rgba(34,211,238,0.5),0_0_30px_rgba(34,211,238,0.5)] border-cyan-400/50' : 'shadow-[inset_0_0_20px_rgba(217,70,239,0.3),0_0_20px_rgba(217,70,239,0.3)] border-fuchsia-500/30'}`} style={{ animation: 'spin3D_Z 10s linear infinite', transformStyle: 'preserve-3d' }}>
+                <div className="absolute -top-2 left-1/2 w-4 h-4 bg-white rounded-full blur-[2px] shadow-[0_0_15px_#fff]"></div>
+                <div className="absolute -bottom-2 left-1/2 w-4 h-4 bg-white rounded-full blur-[2px] shadow-[0_0_15px_#fff]"></div>
             </div>
             
-            <div className="absolute inset-4" style={{ animation: 'spin3D_Y 12s linear infinite reverse', transformStyle: 'preserve-3d' }}>
-               <HexagonSVG className="scale-100 opacity-60" color="#d946ef" />
-               <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-2 h-8 bg-fuchsia-400 shadow-[0_0_15px_#d946ef]"></div>
-            </div>
+            {/* Outer Thick Arc 1 */}
+            <div className="absolute inset-2 border-[4px] border-t-cyan-400 border-r-transparent border-b-cyan-400 border-l-transparent rounded-full mix-blend-screen" style={{ animation: 'spin_cw 6s linear infinite', filter: 'drop-shadow(0 0 10px #22d3ee)' }}></div>
             
-            <div className="absolute inset-10" style={{ animation: 'spin3D_Z 16s linear infinite', transformStyle: 'preserve-3d' }}>
-               <HexagonSVG className="scale-100 opacity-40 border-dotted" color="#e2e8f0" />
-            </div>
-            
-            <div className="absolute inset-16" style={{ animation: 'spin3D_XY 20s linear infinite', transformStyle: 'preserve-3d' }}>
-               <HexagonSVG className="scale-100 opacity-30" color="#22d3ee" />
-               <HexagonSVG className="scale-105 opacity-20" color="#d946ef" style={{ transform: 'rotate(30deg)' }} />
+            {/* Outer Thick Arc 2 */}
+            <div className="absolute inset-0 border-[2px] border-t-transparent border-r-fuchsia-500 border-b-transparent border-l-fuchsia-500 rounded-full mix-blend-screen" style={{ animation: 'spin_ccw 8s linear infinite', filter: 'drop-shadow(0 0 10px #d946ef)' }}></div>
+
+            {/* Orbiting Satellite (Small dot on the very edge) */}
+            <div className="absolute -inset-4 border border-white/5 rounded-full" style={{ animation: 'spin_cw 4s linear infinite' }}>
+                <div className="absolute top-1/2 -left-1.5 w-3 h-3 bg-cyan-300 rounded-full shadow-[0_0_15px_#22d3ee]"></div>
             </div>
 
-            {/* Status Icon Hovering in Front */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'translateZ(100px)' }}>
-               {isListening ? (
-                 <Loader2 className="w-10 h-10 text-white animate-spin drop-shadow-[0_0_15px_rgba(255,255,255,1)]" />
-               ) : (
-                 <Mic className="w-10 h-10 text-cyan-200 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)] group-hover:scale-110 transition-transform duration-300" />
-               )}
-            </div>
+            {/* Remove the Mic entirely. Let the core be pure abstract energy. */}
+            {isListening && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'translateZ(100px)' }}>
+                <Loader2 className="w-8 h-8 text-white animate-spin opacity-50 mix-blend-screen drop-shadow-[0_0_10px_#fff]" />
+              </div>
+            )}
           </div>
         </div>
 
-        <h2 className="text-xl sm:text-2xl font-black tracking-[0.3em] uppercase mb-4 bg-gradient-to-r from-cyan-400 via-white to-fuchsia-500 bg-clip-text text-transparent flex items-center gap-3 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
-           <Hexagon className={`w-5 h-5 sm:w-6 sm:h-6 ${isListening ? 'text-cyan-400 animate-ping' : 'text-fuchsia-500'}`} />
-           SYS.ALICE.HEX
-        </h2>
-
-        {/* Reply text box - Cyberpunk style */}
-        <div className="w-[90%] max-w-md min-h-[60px] flex items-center justify-center text-base font-bold text-cyan-50 px-6 py-3 text-center bg-slate-900/80 backdrop-blur-xl border-l-4 border-l-cyan-400 border-r-4 border-r-fuchsia-500 border-t border-b border-slate-700 shadow-[0_0_30px_rgba(34,211,238,0.15)] rounded-none relative">
-           <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-cyan-400"></div>
-           <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-fuchsia-500"></div>
-           {reply}
+        {/* Reply text box - Minimal Glassmorphism */}
+        <div className="w-[90%] max-w-md min-h-[50px] flex items-center justify-center text-sm font-medium text-white px-6 py-4 text-center bg-white/5 backdrop-blur-2xl rounded-2xl border border-white/10 shadow-xl relative overflow-hidden">
+           {/* Subtle reflection */}
+           <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent"></div>
+           <p className="relative z-10 tracking-wide font-mono leading-relaxed">{reply}</p>
         </div>
 
-        {/* Manual Text Input Form with Cool AI/Brain Icon */}
+        {/* Input Form with Universe/Brain Icon */}
         <form 
           onSubmit={(e) => {
             e.preventDefault();
@@ -255,46 +233,44 @@ const VoiceAssistant = () => {
               setInputText('');
             }
           }}
-          className="mt-4 w-[90%] max-w-md relative flex items-center"
+          className="mt-6 w-[90%] max-w-md relative flex items-center group/form"
         >
           <input 
             type="text" 
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            placeholder="ตั้งคำถาม หรือ พิมพ์คำสั่ง..."
-            className="w-full bg-slate-900/80 text-cyan-100 text-sm pl-5 pr-14 py-3 border border-cyan-500/50 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(34,211,238,0.2)] font-mono rounded-full transition-all"
+            placeholder="Initialize command..."
+            className="w-full bg-black/40 text-cyan-50 text-sm pl-6 pr-16 py-4 border border-white/10 focus:outline-none focus:border-cyan-400/50 focus:bg-black/60 font-mono rounded-full backdrop-blur-md transition-all placeholder:text-white/20 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]"
           />
           <button 
             type="submit"
-            className="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-cyan-500/20 hover:bg-cyan-500/40 text-cyan-400 rounded-full transition-all group border border-transparent hover:border-cyan-400/50"
-            title="ส่งคำถาม"
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center bg-gradient-to-br from-cyan-500/20 to-fuchsia-500/20 hover:from-cyan-500/40 hover:to-fuchsia-500/40 text-cyan-300 hover:text-white rounded-full transition-all group-hover/form:border-white/20 border border-transparent backdrop-blur-lg shadow-lg"
+            title="SEND"
           >
-            {/* BrainCircuit icon representing AI/Smart Brain */}
-            <BrainCircuit className="w-5 h-5 group-hover:scale-110 group-hover:drop-shadow-[0_0_10px_#22d3ee] transition-all" />
+            <BrainCircuit className="w-5 h-5 group-hover:scale-110 drop-shadow-[0_0_8px_#22d3ee] transition-all" />
           </button>
         </form>
 
         {/* Transcript text box */}
         {transcript && (
-          <div className="mt-4 text-xs text-cyan-400 font-mono tracking-wider max-w-md w-full truncate px-4 bg-slate-900/50 py-2 border border-cyan-500/30 rounded-lg">
-             <span className="opacity-50 text-fuchsia-400">INPUT &gt; </span> {transcript}
+          <div className="mt-4 text-[10px] text-cyan-300 font-mono tracking-widest uppercase max-w-md w-full truncate px-4 opacity-70">
+             <span className="text-fuchsia-400">LOG &gt; </span> {transcript}
           </div>
         )}
       </div>
       
-      {/* Keyframes */}
+      {/* CSS Animations */}
       <style>{`
         @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
-          100% { transform: translateY(0px); }
+          0% { transform: translateY(0px) scale(1); }
+          50% { transform: translateY(-10px) scale(1.02); }
+          100% { transform: translateY(0px) scale(1); }
         }
         @keyframes float-particle {
-          0% { transform: translate(0, 0) scale(0.5) rotate(0deg); opacity: 0; }
-          40% { opacity: 0.8; }
-          50% { transform: translate(var(--x-move), var(--y-move)) scale(1.5) rotate(180deg); opacity: 1; }
-          60% { opacity: 0.8; }
-          100% { transform: translate(calc(var(--x-move) * 2), calc(var(--y-move) * 2)) scale(0) rotate(360deg); opacity: 0; }
+          0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+          30% { opacity: 1; }
+          70% { opacity: 1; }
+          100% { transform: translate(var(--x-move), var(--y-move)) scale(0); opacity: 0; }
         }
         @keyframes spin3D_X {
           0% { transform: rotateX(0deg) rotateY(60deg) rotateZ(0deg); }
@@ -308,9 +284,13 @@ const VoiceAssistant = () => {
           0% { transform: rotateX(75deg) rotateY(75deg) rotateZ(0deg); }
           100% { transform: rotateX(75deg) rotateY(75deg) rotateZ(360deg); }
         }
-        @keyframes spin3D_XY {
-          0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
-          100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+        @keyframes spin_cw {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @keyframes spin_ccw {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(-360deg); }
         }
       `}</style>
     </div>
