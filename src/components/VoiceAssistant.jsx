@@ -4,10 +4,24 @@ import { Mic, Search, Loader2, Sparkles } from 'lucide-react';
 const VoiceAssistant = () => {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const [reply, setReply] = useState('ระบบพร้อมใช้งานค่ะ');
+  const [reply, setReply] = useState('ระบบอนุภาคพร้อมทำงานค่ะ');
+  const [particles, setParticles] = useState([]);
   const recognitionRef = useRef(null);
 
   useEffect(() => {
+    // Generate Random Particles
+    const newParticles = Array.from({ length: 50 }).map((_, i) => ({
+      id: i,
+      size: Math.random() * 4 + 2,
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      duration: `${Math.random() * 4 + 3}s`,
+      delay: `${Math.random() * 5}s`,
+      xMove: `${(Math.random() - 0.5) * 150}px`,
+      yMove: `${(Math.random() - 0.5) * 150}px`,
+    }));
+    setParticles(newParticles);
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
@@ -108,14 +122,35 @@ const VoiceAssistant = () => {
 
       <div className="text-center z-10 w-full flex flex-col items-center justify-center">
         
-        {/* TRUE 3D HOLOGRAPHIC CORE */}
+        {/* TRUE 3D HOLOGRAPHIC CORE WITH PARTICLES */}
         <div 
           onClick={toggleListening}
           className="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center cursor-pointer mb-8"
           style={{ perspective: '1200px' }}
         >
+          {/* Particles Layer */}
+          <div className="absolute inset-0 z-0 pointer-events-none">
+            {particles.map(p => (
+              <div
+                key={p.id}
+                className={`absolute rounded-full transition-colors duration-500 ${isListening ? 'bg-neonCyan' : 'bg-neonPurple'}`}
+                style={{
+                  width: p.size,
+                  height: p.size,
+                  top: p.top,
+                  left: p.left,
+                  opacity: 0,
+                  boxShadow: `0 0 ${p.size * 3}px ${isListening ? '#0ff' : '#b0f'}`,
+                  animation: `float-particle ${p.duration} ease-in-out infinite ${p.delay}`,
+                  '--x-move': p.xMove,
+                  '--y-move': p.yMove,
+                }}
+              />
+            ))}
+          </div>
+
           {/* Core container with float */}
-          <div className="relative w-full h-full" style={{ animation: 'float 6s ease-in-out infinite', transformStyle: 'preserve-3d' }}>
+          <div className="relative w-full h-full z-10" style={{ animation: 'float 6s ease-in-out infinite', transformStyle: 'preserve-3d' }}>
             
             {/* Inner Glowing Orb */}
             <div className={`absolute inset-0 m-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full transition-all duration-500 ${isListening ? 'bg-white shadow-[0_0_80px_30px_rgba(0,255,255,0.9)] scale-125' : 'bg-neonCyan shadow-[0_0_50px_15px_rgba(0,255,255,0.6)]'}`}></div>
@@ -163,12 +198,19 @@ const VoiceAssistant = () => {
         )}
       </div>
       
-      {/* Keyframes for TRUE 3D spinning */}
+      {/* Keyframes for TRUE 3D spinning and Particles */}
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px); }
           50% { transform: translateY(-20px); }
           100% { transform: translateY(0px); }
+        }
+        @keyframes float-particle {
+          0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+          40% { opacity: 0.8; }
+          50% { transform: translate(var(--x-move), var(--y-move)) scale(1.5); opacity: 1; }
+          60% { opacity: 0.8; }
+          100% { transform: translate(calc(var(--x-move) * 2), calc(var(--y-move) * 2)) scale(0); opacity: 0; }
         }
         @keyframes spin3D_X {
           0% { transform: rotateX(0deg) rotateY(60deg); }
