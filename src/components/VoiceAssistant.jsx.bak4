@@ -80,7 +80,7 @@ const VoiceAssistant = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          contents: [{ parts: [{ text: "ตอบเป็นภาษาไทยแบบกระชับ เป็นธรรมชาติ เป็นกันเอง ไม่เกิน 3 ประโยค คำถามคือ: " + prompt }] }] 
+          contents: [{ parts: [{ text: "เน€เธโฌเน€เธยเนโฌเธเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเนยเธเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขย เน€เธโฌเน€เธยเน€เธโ€เน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเน€เธโ€เน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเนโฌโ€เน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธโ€เน€เธโฌเน€เธยเธขย เน€เธโฌเน€เธยเนยเธเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธโ€เน€เธโฌเน€เธยเนโฌเธเน€เธโฌเน€เธยเน€เธโ€ เน€เธโฌเน€เธยเนยเธเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธโ€เน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเนยเธเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขย เน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเนยเธเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธโ€เน€เธโฌเน€เธยเธขย 3 เน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขย เน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธโ€เน€เธโฌเน€เธยเนโฌโ€เน€เธโฌเน€เธยเน€เธโ€เน€เธโฌเน€เธยเน€เธยเน€เธโฌเน€เธยเธขยเน€เธโฌเน€เธยเน€เธโ€”เน€เธโฌเน€เธยเน€เธย: " + prompt }] }] 
         })
       });
       
@@ -88,38 +88,14 @@ const VoiceAssistant = () => {
       if (data.candidates && data.candidates[0].content.parts[0].text) {
         const answer = data.candidates[0].content.parts[0].text.replace(/\*/g, '');
         speak(answer);
+      } else if (data.error) {
+        speak('AI ERROR: ' + (data.error.status || 'UNKNOWN'));
+        console.error(data.error);
       } else {
-        console.error("Gemini Error:", data.error || 'Unknown');
-        searchWikipediaFallback(prompt);
+        speak('NEURAL NET ERROR');
       }
     } catch (err) {
-      console.error(err);
-      searchWikipediaFallback(prompt);
-    }
-  };
-
-  const searchWikipediaFallback = async (prompt) => {
-    setReply('AI BUSY... SWITCHING TO WIKIPEDIA DATABANKS');
-    try {
-      const searchUrl = `https://th.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(prompt)}&utf8=&format=json&origin=*`;
-      const searchRes = await fetch(searchUrl);
-      const searchData = await searchRes.json();
-      
-      if (searchData.query && searchData.query.search.length > 0) {
-        const title = searchData.query.search[0].title;
-        const pageUrl = `https://th.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=2&exlimit=1&titles=${encodeURIComponent(title)}&explaintext=1&formatversion=2&format=json&origin=*`;
-        const pageRes = await fetch(pageUrl);
-        const pageData = await pageRes.json();
-        
-        if (pageData.query && pageData.query.pages.length > 0) {
-          const extract = pageData.query.pages[0].extract;
-          speak(`เซิร์ฟเวอร์หลักไม่ว่าง นำข้อมูลสำรองจากวิกิพีเดียมาให้ค่ะ: ` + extract);
-          return;
-        }
-      }
-      speak('ขออภัยค่ะ เซิร์ฟเวอร์หลักล่ม และไม่พบข้อมูลนี้ในฐานข้อมูลสำรองเลยค่ะ');
-    } catch (err) {
-      speak('ระบบเครือข่ายล่มทั้งหมดค่ะ ไม่สามารถเชื่อมต่อฐานข้อมูลได้');
+      speak('CONNECTION FAILED');
     }
   };
 
