@@ -157,6 +157,7 @@ const CommandCenter = ({ focusMode, setFocusMode }) => {
       } else {
         setClassStatus({ message: 'นอกเวลาเรียน', color: 'text-slate-400' });
       }
+    };
 
     updateClassStatus();
   }, [time]);
