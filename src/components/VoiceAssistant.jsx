@@ -98,29 +98,6 @@ const VoiceAssistant = () => {
 
   const handleCommand = (text) => {
     const lowerText = text.toLowerCase();
-    const searchKeywords = ['ค้นหา', 'หา', 'เสิร์ช', 'ค้น', 'google'];
-    let isSearch = false;
-    let query = '';
-
-    for (const keyword of searchKeywords) {
-      if (lowerText.includes(keyword)) {
-        isSearch = true;
-        const parts = lowerText.split(keyword);
-        query = parts[parts.length - 1].trim();
-        if (query === '' && parts.length > 1) {
-             query = parts[0].trim();
-        }
-        break;
-      }
-    }
-
-    if (isSearch && query) {
-      speak(`SEARCHING: ${query}`);
-      setTimeout(() => {
-        window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-      }, 1500);
-      return;
-    }
     
     if (lowerText.includes('สวัสดี') || lowerText.includes('ดีจ้า')) {
       speak('สวัสดี ฉันคือ อลิส (ALICE) ระบบสมองกลศูนย์กลาง');
