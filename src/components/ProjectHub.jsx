@@ -1,5 +1,5 @@
 import React from 'react';
-import { Folder, ExternalLink, Globe, Server } from 'lucide-react';
+import { Folder, ExternalLink, Server } from 'lucide-react';
 
 const projects = [
   {

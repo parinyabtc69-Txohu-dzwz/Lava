@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import CommandCenter from './components/CommandCenter';
 import ProjectHub from './components/ProjectHub';

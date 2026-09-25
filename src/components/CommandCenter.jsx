@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, Calendar, Eye, EyeOff, User } from 'lucide-react';
+import { Activity, Calendar, Eye, EyeOff, User, TrendingUp, Brain } from 'lucide-react';
+import Growth from './Growth';
+import WealthMind from './WealthMind';
 
 const scheduleData = [
   {
@@ -83,6 +85,7 @@ const periods = ['Home Room', '1', '2', '3', '4', '5', '6', '7', '8'];
 const CommandCenter = ({ focusMode, setFocusMode }) => {
   const [time, setTime] = useState(new Date());
   const [classStatus, setClassStatus] = useState(null);
+  const [activeTab, setActiveTab] = useState('schedule');
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
@@ -229,61 +232,109 @@ const CommandCenter = ({ focusMode, setFocusMode }) => {
         </div>
       </div>
 
-      {/* Schedule Panel */}
-      <div className="glass-panel p-5 flex flex-col gap-4 overflow-hidden">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <h2 className="text-sm font-bold tracking-wider uppercase text-slate-200 flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-neonPurple" /> ตารางเรียน ภาคเรียนที่ 1 ปีการศึกษา 2569
-          </h2>
-          <span className="text-xs text-slate-400 font-medium">อ.ปริญญา ยอดทะเนีย</span>
-        </div>
+      {/* Navigation Tabs */}
+      <div className="flex items-center gap-2 mb-4 bg-slate-900/60 p-1.5 rounded-xl border border-slate-800/80 w-fit">
+        <button
+          onClick={() => setActiveTab('schedule')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+            activeTab === 'schedule'
+              ? 'bg-neonCyan/20 text-neonCyan border border-neonCyan/50 shadow-[0_0_15px_rgba(0,255,255,0.2)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
+          }`}
+        >
+          <Calendar className="w-4 h-4" /> ตารางเรียน
+        </button>
+        <button
+          onClick={() => setActiveTab('growth')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+            activeTab === 'growth'
+              ? 'bg-neonPurple/20 text-neonPurple border border-neonPurple/50 shadow-[0_0_15px_rgba(138,43,226,0.2)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
+          }`}
+        >
+          <TrendingUp className="w-4 h-4" /> ทักษะ & การเติบโต
+        </button>
+        <button
+          onClick={() => setActiveTab('mind')}
+          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${
+            activeTab === 'mind'
+              ? 'bg-fuchsia-500/20 text-fuchsia-400 border border-fuchsia-500/50 shadow-[0_0_15px_rgba(217,70,239,0.2)]'
+              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent'
+          }`}
+        >
+          <Brain className="w-4 h-4" /> พัฒนาตนเอง
+        </button>
+      </div>
 
-        <div className="w-full overflow-x-auto">
-          <div className="min-w-[1000px] rounded-lg border border-slate-700/50 overflow-hidden">
-            <table className="w-full text-center border-collapse">
-              <thead>
-                <tr className="bg-slate-800/80">
-                  <th className="p-2 border border-slate-700/50 text-xs text-slate-400 font-semibold w-[60px]">วัน/เวลา</th>
-                  {timeSlots.map((time, i) => (
-                    <th key={i} className="p-2 border border-slate-700/50 text-[10px] text-slate-300 font-mono tracking-tighter">
-                      {time}
-                    </th>
-                  ))}
-                </tr>
-                <tr className="bg-slate-800/40">
-                  <th className="p-2 border border-slate-700/50 text-xs text-slate-400 font-semibold">คาบที่</th>
-                  {periods.map((period, i) => (
-                    <th key={i} className="p-2 border border-slate-700/50 text-[11px] text-neonCyan/80 font-bold">
-                      {period}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {scheduleData.map((row, i) => (
-                  <tr key={i} className="hover:bg-slate-800/30 transition-colors">
-                    <td className={`p-2 border border-slate-700/50 text-sm font-bold bg-slate-800/10 ${row.color}`}>
-                      {row.day}
-                    </td>
-                    {row.slots.map((slot, j) => (
-                      <td
-                        key={j}
-                        colSpan={slot.span}
-                        className={`p-2 border border-slate-700/50 text-[10px] text-slate-300 whitespace-pre-wrap leading-relaxed transition-colors
-                          ${slot.text ? 'bg-slate-800/60 hover:bg-slate-700/60' : ''}
-                          ${slot.isLunch ? 'bg-green-900/20 shadow-[inset_0_0_10px_rgba(74,222,128,0.1)]' : ''}
-                        `}
-                      >
-                        {slot.text}
-                      </td>
+      {/* Tab Contents */}
+      {activeTab === 'schedule' && (
+        <div className="glass-panel p-5 flex flex-col gap-4 overflow-hidden">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h2 className="text-sm font-bold tracking-wider uppercase text-slate-200 flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-neonPurple" /> ตารางเรียน ภาคเรียนที่ 1 ปีการศึกษา 2569
+            </h2>
+            <span className="text-xs text-slate-400 font-medium">อ.ปริญญา ยอดทะเนีย</span>
+          </div>
+
+          <div className="w-full overflow-x-auto">
+            <div className="min-w-[1000px] rounded-lg border border-slate-700/50 overflow-hidden">
+              <table className="w-full text-center border-collapse">
+                <thead>
+                  <tr className="bg-slate-800/80">
+                    <th className="p-2 border border-slate-700/50 text-xs text-slate-400 font-semibold w-[60px]">วัน/เวลา</th>
+                    {timeSlots.map((time, i) => (
+                      <th key={i} className="p-2 border border-slate-700/50 text-[10px] text-slate-300 font-mono tracking-tighter">
+                        {time}
+                      </th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                  <tr className="bg-slate-800/40">
+                    <th className="p-2 border border-slate-700/50 text-xs text-slate-400 font-semibold">คาบที่</th>
+                    {periods.map((period, i) => (
+                      <th key={i} className="p-2 border border-slate-700/50 text-[11px] text-neonCyan/80 font-bold">
+                        {period}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {scheduleData.map((row, i) => (
+                    <tr key={i} className="hover:bg-slate-800/30 transition-colors">
+                      <td className={`p-2 border border-slate-700/50 text-sm font-bold bg-slate-800/10 ${row.color}`}>
+                        {row.day}
+                      </td>
+                      {row.slots.map((slot, j) => (
+                        <td
+                          key={j}
+                          colSpan={slot.span}
+                          className={`p-2 border border-slate-700/50 text-[10px] text-slate-300 whitespace-pre-wrap leading-relaxed transition-colors
+                            ${slot.text ? 'bg-slate-800/60 hover:bg-slate-700/60' : ''}
+                            ${slot.isLunch ? 'bg-green-900/20 shadow-[inset_0_0_10px_rgba(74,222,128,0.1)]' : ''}
+                          `}
+                        >
+                          {slot.text}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {activeTab === 'growth' && (
+        <div className="flex flex-col gap-6">
+          <Growth />
+        </div>
+      )}
+
+      {activeTab === 'mind' && (
+        <div className="flex flex-col gap-6">
+          <WealthMind />
+        </div>
+      )}
     </>
   );
 };
